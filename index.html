@@ -3,94 +3,267 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>YassClean Pricing Calculator</title>
+  <title>YassClean Quote Estimator</title>
   <style>
+    /* Global Resets and Box Sizing */
+    html {
+      box-sizing: border-box;
+      overflow-x: hidden;
+      height: 100%;
+    }
+
+    *, *::before, *::after {
+      box-sizing: inherit;
+    }
+
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
       background-color: #f4f7f6;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
+      justify-content: flex-start;
       align-items: center;
-      min-height: 100vh;
+      min-height: 100%;
       margin: 0;
-      padding: 20px;
+      padding: 30px 20px;
+      gap: 25px;
+      color: #333;
     }
-    #pricing-calculator {
+
+    #pricing-calculator, #time-saved-section {
       background: #ffffff;
-      padding: 30px;
+      padding: 30px 35px;
       border-radius: 20px;
-      border: none;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
       max-width: 520px;
       width: 100%;
     }
+    
+    .logo-container {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    
+    .logo-container h1 {
+        font-size: 36px;
+        color: #2c3e50;
+        font-weight: 700;
+        margin: 0;
+    }
+
     h2 {
       margin-top: 0;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
       font-size: 26px;
       color: #2c3e50;
       text-align: center;
     }
+
+    h3 {
+      margin-top: 25px;
+      margin-bottom: 15px;
+      font-size: 20px;
+      color: #34495e;
+      border-bottom: 2px solid #ddff00;
+      padding-bottom: 5px;
+      display: inline-block;
+    }
+
     label {
       display: block;
       margin-bottom: 8px;
       font-weight: 600;
       color: #555;
+      font-size: 15px;
     }
+
     input[type="number"],
     select {
       width: 100%;
-      padding: 10px;
-      margin-bottom: 15px;
+      padding: 12px 15px;
+      margin-top: 6px;
+      margin-bottom: 18px;
       border-radius: 8px;
       border: 1px solid #ccc;
+      font-size: 16px;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
     }
+    input[type="number"]:focus,
+    select:focus {
+        border-color: #ddff00;
+        box-shadow: 0 0 0 3px rgba(221, 255, 0, 0.3);
+        outline: none;
+    }
+
     .checkbox-group {
-      margin-bottom: 15px;
+      margin-bottom: 20px;
+      background-color: #fdfdfd;
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid #eee;
     }
+    .checkbox-group strong {
+        color: #34495e;
+        display: block;
+        margin-bottom: 12px;
+        font-size: 16px;
+    }
+    .checkbox-group label {
+      display: flex;
+      align-items: center;
+      font-weight: normal;
+      margin-bottom: 12px;
+      color: #333;
+      font-size: 15px;
+      cursor: pointer;
+    }
+    .checkbox-group label:last-child {
+        margin-bottom: 0;
+    }
+    .checkbox-group input[type="checkbox"] {
+      margin-right: 12px;
+      width: auto;
+      transform: scale(1.1);
+      accent-color: #ddff00;
+    }
+
     button {
-      background: #ddff00;
+      background: linear-gradient(45deg, #ddff00, #c8e600);
       border: none;
-      padding: 12px;
+      padding: 15px 20px;
       font-weight: bold;
       border-radius: 8px;
       cursor: pointer;
       width: 100%;
-    }
-    #result {
-      margin-top: 20px;
       font-size: 18px;
+      color: #333;
+      transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+      margin-top: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 7px 14px rgba(0,0,0,0.1);
+        background: linear-gradient(45deg, #c8e600, #b4cc00);
+    }
+    button:active {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    #result {
+      margin-top: 25px;
+      font-size: 22px;
       font-weight: bold;
       color: #27ae60;
       text-align: center;
-      padding: 10px;
+      padding: 15px;
       background-color: #e8f5e9;
       border-radius: 8px;
+      border-left: 5px solid #27ae60;
     }
+
+    /* Contact Info Section */
+    #contact-info {
+        text-align: center;
+        margin-top: 25px;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
+        font-size: 15px;
+        line-height: 1.7;
+    }
+    #contact-info p {
+        margin: 8px 0;
+    }
+    #contact-info a {
+        color: #34495e;
+        font-weight: 600;
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+    #contact-info a:hover {
+        color: #c8e600;
+        text-decoration: underline;
+    }
+
+
+    /* Time Saved Section Styling */
     #time-saved-section {
-      display: none;
-      margin-top: 20px;
-      padding: 20px;
-      border-radius: 20px;
-      border: none;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border-top: 5px solid #ddff00;
+    }
+    #time-details p {
+        font-size: 16px;
+        line-height: 1.7;
+        margin-bottom: 12px;
+        color: #444;
+    }
+    #time-details strong {
+        font-size: 24px;
+        color: #2c3e50;
+        font-weight: 700;
+    }
+    #fun-activities-details .activity-category {
+        background-color: #f9f9f9;
+        border: 1px solid #e9e9e9;
+        border-left: 4px solid #ddff00;
+        padding: 15px 20px;
+        border-radius: 8px;
+        margin-top: 20px;
+    }
+    #fun-activities-details .category-title {
+        font-weight: 600;
+        font-size: 17px;
+        color: #34495e;
+        margin-bottom: 10px;
+    }
+    #fun-activities-details .category-title strong {
+        color: #333;
+        font-weight: 700;
+    }
+    #time-saved-section ul {
+        margin-top: 8px;
+        padding-left: 25px;
+        list-style: none;
+    }
+    #time-saved-section li {
+        margin-bottom: 10px;
+        font-size: 15px;
+        line-height: 1.6;
+        position: relative;
+    }
+    #time-saved-section li::before {
+        content: "✓";
+        color: #c8e600;
+        font-weight: bold;
+        position: absolute;
+        left: -20px;
+        top: 1px;
     }
   </style>
 </head>
 <body>
+  <div class="logo-container">
+      <h1>YassClean</h1>
+  </div>
   <div id="pricing-calculator">
     <h2>Instant Price Estimate</h2>
+
     <label for="bedrooms">Bedrooms:</label>
     <input type="number" id="bedrooms" value="1" min="0">
+
     <label for="bathrooms">Bathrooms:</label>
     <input type="number" id="bathrooms" value="1" min="0">
-    <label for="additionalRooms">Additional Rooms:</label>
+
+    <label for="additionalRooms">Additional Rooms (e.g., Office, Dining):</label>
     <input type="number" id="additionalRooms" value="0" min="0">
+
     <div class="checkbox-group">
+      <strong>Add-ons:</strong>
       <label><input type="checkbox" id="fridge"> Inside Fridge</label>
       <label><input type="checkbox" id="oven"> Inside Oven</label>
-      <label><input type="checkbox" id="deep"> Deep Clean</label>
+      <label><input type="checkbox" id="deep"> Deep Clean (First Visit Only)</label>
     </div>
+
     <label for="discount">Cleaning Frequency:</label>
     <select id="discount">
       <option value="0">One-Time</option>
@@ -98,17 +271,52 @@
       <option value="0.15">Bi-Weekly (Save 15%)</option>
       <option value="0.20">Weekly (Save 20%)</option>
     </select>
+
     <button onclick="calculatePrice()">Get My Estimate & Time Saved</button>
-    <div id="result">Total: $0.00</div>
+    <div id="result">Your Estimate: $0.00</div>
+    
+    <div id="contact-info">
+        <p>Ready to book? Schedule instantly at <a href="https://book.yassclean.com" target="_blank" rel="noopener noreferrer"><strong>book.yassclean.com</strong></a></p>
+        <p>For questions or to learn more, contact us:</p>
+        <p>📧 <a href="mailto:info@yassclean.com">info@yassclean.com</a></p>
+        <p>📞 <a href="tel:9737555369">973-755-5369</a></p>
+        <p>🌐 <a href="https://yassclean.com" target="_blank" rel="noopener noreferrer">yassclean.com</a></p>
+    </div>
   </div>
-  <div id="time-saved-section">
+
+  <div id="time-saved-section" style="display: none;">
     <h2>Reclaim Your Time!</h2>
-    <div id="time-details"></div>
-    <div id="fun-activities-details"></div>
+    <div id="time-details">
+      <!-- Content will be populated by JavaScript -->
+    </div>
+    <h3>Imagine what you could do:</h3>
+    <div id="fun-activities-details">
+      <!-- Fun activities will be populated by JavaScript -->
+    </div>
   </div>
 
   <script>
     function calculatePrice() {
+      // Pricing constants
+      const bedroomPrice = 24;
+      const bathroomPrice = 32;
+      const additionalRoomPrice = 24;
+      const kitchenPrice = 32;
+      const livingPrice = 42;
+      const fridgePrice = 45;
+      const ovenPrice = 30;
+      const deepCleanPrice = 30;
+
+      // Time constants (in hours per session)
+      const timePerBedroom = 0.5;
+      const timePerBathroom = 0.75;
+      const timePerAdditionalRoom = 0.5;
+      const timeKitchenBase = 1;
+      const timeLivingBase = 0.75;
+      const timeFridge = 0.5;
+      const timeOven = 0.75;
+      const timeDeepCleanAddon = 1;
+
       const bedrooms = parseInt(document.getElementById("bedrooms").value) || 0;
       const bathrooms = parseInt(document.getElementById("bathrooms").value) || 0;
       const additionalRooms = parseInt(document.getElementById("additionalRooms").value) || 0;
@@ -118,80 +326,137 @@
       const discountValue = parseFloat(document.getElementById("discount").value);
       const frequencyText = document.getElementById("discount").options[document.getElementById("discount").selectedIndex].text;
 
-      let total = (bedrooms * 24) + (bathrooms * 32) + (additionalRooms * 24);
-      if (bedrooms > 0 || bathrooms > 0 || additionalRooms > 0) total += 32 + 42;
-      if (hasFridge) total += 45;
-      if (hasOven) total += 30;
-      if (hasDeep) total += 30;
+      let total = (bedrooms * bedroomPrice) +
+                  (bathrooms * bathroomPrice) +
+                  (additionalRooms * additionalRoomPrice);
+      if (bedrooms > 0 || bathrooms > 0 || additionalRooms > 0) {
+        total += kitchenPrice + livingPrice;
+      }
+      if (hasFridge) total += fridgePrice;
+      if (hasOven) total += ovenPrice;
+      if (hasDeep) total += deepCleanPrice;
+
       const discountedTotal = total * (1 - discountValue);
-      document.getElementById("result").textContent = `Estimate: $${discountedTotal.toFixed(2)}`;
+      document.getElementById("result").textContent = `Your Estimate: $${discountedTotal.toFixed(2)}`;
 
       let timeSavedPerSession = 0;
-      if (bedrooms > 0 || bathrooms > 0 || additionalRooms > 0) timeSavedPerSession += 1 + 0.75;
-      timeSavedPerSession += bedrooms * 0.5 + bathrooms * 0.75 + additionalRooms * 0.5;
-      if (hasFridge) timeSavedPerSession += 0.5;
-      if (hasOven) timeSavedPerSession += 0.75;
-      if (hasDeep) timeSavedPerSession += 1;
+      if (bedrooms > 0 || bathrooms > 0 || additionalRooms > 0) {
+        timeSavedPerSession += timeKitchenBase + timeLivingBase;
+      }
+      timeSavedPerSession += bedrooms * timePerBedroom;
+      timeSavedPerSession += bathrooms * timePerBathroom;
+      timeSavedPerSession += additionalRooms * timePerAdditionalRoom;
+      if (hasFridge) timeSavedPerSession += timeFridge;
+      if (hasOven) timeSavedPerSession += timeOven;
+      if (hasDeep) timeSavedPerSession += timeDeepCleanAddon;
 
       const timeDetailsDiv = document.getElementById("time-details");
       const timeSavedSectionDiv = document.getElementById("time-saved-section");
+      let activityConfig = {};
+
       if (timeSavedPerSession > 0) {
         timeSavedSectionDiv.style.display = "block";
         if (frequencyText.includes("One-Time")) {
-          timeDetailsDiv.innerHTML = `<p>You'll save: <strong>${Math.round(timeSavedPerSession)} hours</strong>!</p>`;
+          timeDetailsDiv.innerHTML = `<p>For this one-time cleaning, you'll save approximately: <strong>${Math.round(timeSavedPerSession)} hours</strong>!</p>`;
+          activityConfig = { oneTimeSave: Math.round(timeSavedPerSession) };
         } else {
-          let weeklyTimeSaved = frequencyText.includes("Weekly") ? timeSavedPerSession : 
-                              frequencyText.includes("Bi-Weekly") ? timeSavedPerSession / 2 : 
-                              timeSavedPerSession / 4;
-          const weekly = Math.round(weeklyTimeSaved);
-          const monthly = Math.round(weekly * 4);
-          const yearly = Math.round(weekly * 52);
+          let weeklyTimeSaved = 0;
+          if (frequencyText.includes("Weekly")) {
+            weeklyTimeSaved = timeSavedPerSession;
+          } else if (frequencyText.includes("Bi-Weekly")) {
+            weeklyTimeSaved = timeSavedPerSession / 2;
+          } else if (frequencyText.includes("Monthly")) {
+            weeklyTimeSaved = timeSavedPerSession / 4;
+          }
+
+          const roundedWeeklyTime = Math.round(weeklyTimeSaved);
+          const roundedMonthlyTime = Math.round(weeklyTimeSaved * 4);
+          const roundedYearlyTime = Math.round(weeklyTimeSaved * 52);
+
           timeDetailsDiv.innerHTML = `
-            <p>Save approximately:</p>
-            <p><strong>${weekly} hours</strong> per week</p>
-            <p><strong>${monthly} hours</strong> per month</p>
-            <p><strong>${yearly} hours</strong> per year</p>
+            <p>By letting us handle the cleaning, you could save approximately:</p>
+            <p><strong>${roundedWeeklyTime} hours</strong> per week</p>
+            <p><strong>${roundedMonthlyTime} hours</strong> per month</p>
+            <p><strong>${roundedYearlyTime} hours</strong> per year!</p>
           `;
+          activityConfig = {
+            weekly: roundedWeeklyTime,
+            monthly: roundedMonthlyTime,
+            yearly: roundedYearlyTime
+          };
         }
+        populateFunActivities(activityConfig);
       } else {
         timeSavedSectionDiv.style.display = "none";
         timeDetailsDiv.innerHTML = "";
       }
+    }
 
-      // Prepare data for webhook
-      const webhookData = {
-        event: "test event",
-        bedrooms: bedrooms,
-        bathrooms: bathrooms,
-        additionalRooms: additionalRooms,
-        addOns: {
-          fridge: hasFridge,
-          oven: hasOven,
-          deepClean: hasDeep
-        },
-        frequency: frequencyText,
-        totalEstimate: discountedTotal.toFixed(2),
-        timeSavedPerSession: Math.round(timeSavedPerSession),
-        timestamp: new Date().toISOString()
-      };
+    function populateFunActivities(savedTime) {
+      const activitiesContainer = document.getElementById("fun-activities-details");
+      activitiesContainer.innerHTML = "";
+      let suggestionsHTML = "";
 
-      // Webhook call (active for live testing)
-      fetch('https://yassclean.app.n8n.cloud/webhook-test/3d21bee7-d203-4e4f-a077-3d51e3262dff', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(webhookData)
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Webhook request failed');
+      if (savedTime.oneTimeSave !== undefined && savedTime.oneTimeSave > 0) {
+        const oneTime = savedTime.oneTimeSave;
+        suggestionsHTML = `<div class="activity-category one-time-activity">
+                            <p class="category-title">With these <strong>${oneTime} hours</strong> back in your day, you could:</p><ul>`;
+        if (oneTime >= 1 && oneTime < 2) {
+            suggestionsHTML += "<li>Enjoy a peaceful coffee and read a few chapters of a book.</li><li>Go for a refreshing walk or quick workout.</li>";
+        } else if (oneTime >= 2 && oneTime < 4) {
+            suggestionsHTML += "<li>Watch that movie you've been meaning to see.</li><li>Tackle a small home organization project.</li><li>Enjoy an uninterrupted hobby session.</li>";
+        } else if (oneTime >= 4) {
+            suggestionsHTML += "<li>Binge-watch a couple of movies or a few episodes of your favorite show!</li><li>Spend an afternoon on a local adventure or hike.</li><li>Get a head start on a creative project.</li>";
+        } else {
+             suggestionsHTML += "<li>Relax and recharge with your extra hour!</li>";
         }
-        return response.json();
-      })
-      .catch(error => {
-        console.error('Error sending data to webhook:', error);
-      });
+        suggestionsHTML += "</ul></div>";
+      } else if (savedTime.weekly > 0 || savedTime.monthly > 0 || savedTime.yearly > 0) {
+        if (savedTime.weekly > 0) {
+            suggestionsHTML += `<div class="activity-category weekly-activities">
+                                <p class="category-title">With an extra <strong>${savedTime.weekly} hours each week</strong>, you could:</p><ul>`;
+            if (savedTime.weekly >= 1 && savedTime.weekly < 2) {
+                suggestionsHTML += "<li>Enjoy a peaceful coffee break and read daily.</li><li>Go for regular refreshing walks or jogs.</li>";
+            } else if (savedTime.weekly >= 2 && savedTime.weekly < 4) {
+                suggestionsHTML += "<li>Watch a movie weekly or catch up on TV shows.</li><li>Dedicate consistent time to a weekly hobby or class.</li>";
+            } else if (savedTime.weekly >= 4) {
+                suggestionsHTML += `<li>That's ${savedTime.weekly} hours a week! Enough to binge-watch two full movies, take a short online course module each week, or enjoy longer weekend outings.</li>`;
+            }
+            suggestionsHTML += "</ul></div>";
+        }
+
+        if (savedTime.monthly > 0) {
+            suggestionsHTML += `<div class="activity-category monthly-activities">
+                                <p class="category-title">That's about <strong>${savedTime.monthly} hours per month</strong>! Imagine:</p><ul>`;
+            if (savedTime.monthly >= 2 && savedTime.monthly < 8) {
+                 suggestionsHTML += "<li>Taking a nice day trip each month.</li><li>Making steady progress on learning a new skill.</li>";
+            } else if (savedTime.monthly >= 8 && savedTime.monthly < 16) {
+                suggestionsHTML += "<li>Planning and enjoying a weekend getaway monthly!</li><li>Completing a significant chunk of an online certification.</li>";
+            } else if (savedTime.monthly >= 16) {
+                 suggestionsHTML += `<li>With ${savedTime.monthly} hours a month, you could explore new cities on weekend trips, or seriously dive into a big project (like writing, coding, or even training to scale a (small) mountain over several months!).</li>`;
+            }
+            suggestionsHTML += "</ul></div>";
+        }
+
+        if (savedTime.yearly > 0) {
+            suggestionsHTML += `<div class="activity-category yearly-activities">
+                                <p class="category-title">And a whopping <strong>${savedTime.yearly} hours per year</strong>! You could:</p><ul>`;
+            if (savedTime.yearly >= 25 && savedTime.yearly < 100) {
+                suggestionsHTML += "<li>Master the basics of a new language or musical instrument.</li><li>Train for and complete a fitness challenge like a marathon or triathlon.</li>";
+            } else if (savedTime.yearly >= 100 && savedTime.yearly < 300) {
+                suggestionsHTML += "<li>Write that book you've always dreamed of.</li><li>Volunteer significantly for a cause you're passionate about.</li><li>Take several shorter vacations or one longer one.</li>";
+            } else if (savedTime.yearly >= 300) {
+                suggestionsHTML += `<li>With ${savedTime.yearly} hours a year... sky's the limit! You could become proficient in a new language and use it while you sail the Mediterranean, start a part-time business, or undertake a major personal development journey!</li>`;
+            }
+            suggestionsHTML += "</ul></div>";
+        }
+      }
+
+      if (suggestionsHTML.trim() === "") {
+        activitiesContainer.innerHTML = "<p>Select your cleaning options and frequency to see what you could do with the time saved!</p>";
+      } else {
+        activitiesContainer.innerHTML = suggestionsHTML;
+      }
     }
   </script>
 </body>
