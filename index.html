@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>YassClean Pricing Calculator</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #f4f7f6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+    #pricing-calculator {
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 20px;
+      border: none;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      max-width: 520px;
+      width: 100%;
+    }
+    h2 {
+      margin-top: 0;
+      margin-bottom: 20px;
+      font-size: 26px;
+      color: #2c3e50;
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #555;
+    }
+    input[type="number"],
+    select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    .checkbox-group {
+      margin-bottom: 15px;
+    }
+    button {
+      background: #ddff00;
+      border: none;
+      padding: 12px;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #27ae60;
+      text-align: center;
+      padding: 10px;
+      background-color: #e8f5e9;
+      border-radius: 8px;
+    }
+    #time-saved-section {
+      display: none;
+      margin-top: 20px;
+      padding: 20px;
+      border-radius: 20px;
+      border: none;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body>
+  <div id="pricing-calculator">
+    <h2>Instant Price Estimate</h2>
+    <label for="bedrooms">Bedrooms:</label>
+    <input type="number" id="bedrooms" value="1" min="0">
+    <label for="bathrooms">Bathrooms:</label>
+    <input type="number" id="bathrooms" value="1" min="0">
+    <label for="additionalRooms">Additional Rooms:</label>
+    <input type="number" id="additionalRooms" value="0" min="0">
+    <div class="checkbox-group">
+      <label><input type="checkbox" id="fridge"> Inside Fridge</label>
+      <label><input type="checkbox" id="oven"> Inside Oven</label>
+      <label><input type="checkbox" id="deep"> Deep Clean</label>
+    </div>
+    <label for="discount">Cleaning Frequency:</label>
+    <select id="discount">
+      <option value="0">One-Time</option>
+      <option value="0.10">Monthly (Save 10%)</option>
+      <option value="0.15">Bi-Weekly (Save 15%)</option>
+      <option value="0.20">Weekly (Save 20%)</option>
+    </select>
+    <button onclick="calculatePrice()">Get My Estimate & Time Saved</button>
+    <div id="result">Total: $0.00</div>
+  </div>
+  <div id="time-saved-section">
+    <h2>Reclaim Your Time!</h2>
+    <div id="time-details"></div>
+    <div id="fun-activities-details"></div>
+  </div>
+
+  <script>
+    function calculatePrice() {
+      const bedrooms = parseInt(document.getElementById("bedrooms").value) || 0;
+      const bathrooms = parseInt(document.getElementById("bathrooms").value) || 0;
+      const additionalRooms = parseInt(document.getElementById("additionalRooms").value) || 0;
+      const hasFridge = document.getElementById("fridge").checked;
+      const hasOven = document.getElementById("oven").checked;
+      const hasDeep = document.getElementById("deep").checked;
+      const discountValue = parseFloat(document.getElementById("discount").value);
+      const frequencyText = document.getElementById("discount").options[document.getElementById("discount").selectedIndex].text;
+
+      let total = (bedrooms * 24) + (bathrooms * 32) + (additionalRooms * 24);
+      if (bedrooms > 0 || bathrooms > 0 || additionalRooms > 0) total += 32 + 42;
+      if (hasFridge) total += 45;
+      if (hasOven) total += 30;
+      if (hasDeep) total += 30;
+      const discountedTotal = total * (1 - discountValue);
+      document.getElementById("result").textContent = `Estimate: $${discountedTotal.toFixed(2)}`;
+
+      let timeSavedPerSession = 0;
+      if (bedrooms > 0 || bathrooms > 0 || additionalRooms > 0) timeSavedPerSession += 1 + 0.75;
+      timeSavedPerSession += bedrooms * 0.5 + bathrooms * 0.75 + additionalRooms * 0.5;
+      if (hasFridge) timeSavedPerSession += 0.5;
+      if (hasOven) timeSavedPerSession += 0.75;
+      if (hasDeep) timeSavedPerSession += 1;
+
+      const timeDetailsDiv = document.getElementById("time-details");
+      const timeSavedSectionDiv = document.getElementById("time-saved-section");
+      if (timeSavedPerSession > 0) {
+        timeSavedSectionDiv.style.display = "block";
+        if (frequencyText.includes("One-Time")) {
+          timeDetailsDiv.innerHTML = `<p>You'll save: <strong>${Math.round(timeSavedPerSession)} hours</strong>!</p>`;
+        } else {
+          let weeklyTimeSaved = frequencyText.includes("Weekly") ? timeSavedPerSession : 
+                              frequencyText.includes("Bi-Weekly") ? timeSavedPerSession / 2 : 
+                              timeSavedPerSession / 4;
+          const weekly = Math.round(weeklyTimeSaved);
+          const monthly = Math.round(weekly * 4);
+          const yearly = Math.round(weekly * 52);
+          timeDetailsDiv.innerHTML = `
+            <p>Save approximately:</p>
+            <p><strong>${weekly} hours</strong> per week</p>
+            <p><strong>${monthly} hours</strong> per month</p>
+            <p><strong>${yearly} hours</strong> per year</p>
+          `;
+        }
+      } else {
+        timeSavedSectionDiv.style.display = "none";
+        timeDetailsDiv.innerHTML = "";
+      }
+
+      // Prepare data for webhook
+      const webhookData = {
+        event: "test event",
+        bedrooms: bedrooms,
+        bathrooms: bathrooms,
+        additionalRooms: additionalRooms,
+        addOns: {
+          fridge: hasFridge,
+          oven: hasOven,
+          deepClean: hasDeep
+        },
+        frequency: frequencyText,
+        totalEstimate: discountedTotal.toFixed(2),
+        timeSavedPerSession: Math.round(timeSavedPerSession),
+        timestamp: new Date().toISOString()
+      };
+
+      // Webhook call (active for live testing)
+      fetch('https://yassclean.app.n8n.cloud/webhook-test/3d21bee7-d203-4e4f-a077-3d51e3262dff', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(webhookData)
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Webhook request failed');
+        }
+        return response.json();
+      })
+      .catch(error => {
+        console.error('Error sending data to webhook:', error);
+      });
+    }
+  </script>
+</body>
+</html>
