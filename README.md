@@ -1,2 +1,2 @@
-# Webcalc
-Pricing calculator round 2
+# Instaprice
+YassClean instant pricing calculator
